@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>D&D 5E </title>
+        <style>
+            body {
+                background: #3d4f78;
+            }
+
+            .container-restaurant {
+                width: 400px;
+                margin: 10px auto;
+                display: grid;
+                grid-template-columns: 200px 200px;
+                background: #283A63;
+            }
+
+            .container-chef {
+                width: 600px;
+                margin: 10px auto;
+                display: grid;
+                grid-template-columns: repeat(4, 150px);
+                background: #283A63;
+            }
+
+            .container-meal {
+                width: 900px;
+                margin: 10px auto;
+                display: grid;
+                grid-template-columns: repeat(6, 150px);
+                background: #283A63;
+            }
+
+            .container-simulation {
+                width: 900px;
+                margin: 10px auto;
+                display: grid;
+                grid-template-columns: repeat(6, 150px);
+                background: #283A63;
+            }
+
+            .main-heading {
+                font-weight: bolder;
+                font-size: larger;
+                color: #ffffff;
+                background: #132349;
+                padding: 10px;
+                text-align: center;
+            }
+
+            .row-heading {
+                font-weight: bold;
+                color: #8994af;
+                padding: 2px;
+            }
+
+            .cell {
+                padding: 2px;
+                color: #dddddd;
+            }
+        </style>
+    </head>
+    <body onload="Load();">
+        <div class='container-restaurant'>
+            <div class='main-heading' style='grid-column: span 2;'>Restaurant Info</div>
+
+            <div class='row-heading'>Hours servering per day</div>
+            <div class='cell' id='HoursPerDay'>10</div>
+
+            <div class='row-heading'>Base Reputation</div>
+            <div class='cell' id='BaseReputation'></div>
+
+            <div class='row-heading'>Reputation</div>
+            <div class='cell' id='Reputation'></div>
+
+            <div class='row-heading'># of tables</div>
+            <div class='cell' id='NumberOfTables'>6</div>
+
+            <div class='row-heading'>Min tables per day</div>
+            <div class='cell' id='MinTablesDay'></div>
+
+            <div class='row-heading'>Max tables per day</div>
+            <div class='cell' id='MaxTablesDay'></div>
+
+            <div class='row-heading'>Average people per day</div>
+            <div class='cell' id='AveragePeopleDay'></div>
+
+            <div class='row-heading'>Chef Skill</div>
+            <div class='cell'>
+                <select id='chefSkill' onchange="OnChefSkillChange();">
+                    <option value='novice'>Novice</option>
+                    <option value='intermediate' selected>Intermediate</option>
+                    <option value='expert'>Expert</option>
+                    <option value='master'>Master</option>
+                </select>
+            </div>
+        </div>
+
+        <div class='container-chef'>
+            <div class='main-heading' style='grid-column: span 4;'>Staff Info</div>
+            <div class='row-heading'>Chefs Skill</div>
+            <div class='row-heading'>Chefs Cost/day</div>
+            <div class='row-heading'>Chefs Reputation Modifier</div>
+            <div class='row-heading'>Chefs Min Rep Required</div>
+
+            <div class='cell'>Novice</div>
+            <div class='cell' id='noviceCost'>.5 g</div>
+            <div class='cell' id='noviceRepMod'>0</div>
+            <div class='cell' id='noviceRepRequired'>0</div>
+
+            <div class='cell'>Intermediate</div>
+            <div class='cell' id='intermediateCost'>1 g</div>
+            <div class='cell' id='intermediateRepMod'>0</div>
+            <div class='cell' id='intermediateRepRequired'>0</div>
+
+            <div class='cell'>Expert</div>
+            <div class='cell' id='expertCost'>2 g</div>
+            <div class='cell' id='expertRepMod'>1</div>
+            <div class='cell' id='expertRepRequired'>3</div>
+
+            <div class='cell' id='masterTitle'>Master</div>
+            <div class='cell' id='masterCost'>4 g</div>
+            <div class='cell' id='masterRepMod'>3</div>
+            <div class='cell' id='masterRepRequired'>7</div>
+        </div>
+
+        <div class='container-meal'>
+            <div class='main-heading' style='grid-column: span 6;'>Meal Info</div>
+            <div class='row-heading'>Meal Type</div>
+            <div class='row-heading'>Min Chef Skill</div>
+            <div class='row-heading'>Cost (in gold)</div>
+            <div class='row-heading'>Markup</div>
+            <div class='row-heading'>Price (in gold)</div>
+            <div class='row-heading'>% of patrons/day</div>
+
+            <div class='cell'>Squalid</div>
+            <div class='cell'>Novice</div>
+            <div class='cell' id='squalidCost'></div>
+            <div class='cell' id='squalidMarkup'></div>
+            <div class='cell' id='squalidPrice'>.07</div>
+            <div class='cell' id='squalidPercentPatrons'></div>
+
+            <div class='cell'>Poor</div>
+            <div class='cell'>Novice</div>
+            <div class='cell' id='poorCost'></div>
+            <div class='cell' id='poorMarkup'></div>
+            <div class='cell' id='poorPrice'>.1</div>
+            <div class='cell' id='poorPercentPatrons'></div>
+
+            <div class='cell'>Modest</div>
+            <div class='cell'>Novice</div>
+            <div class='cell' id='modestCost'></div>
+            <div class='cell' id='modestMarkup'></div>
+            <div class='cell' id='modestPrice'>.3</div>
+            <div class='cell' id='modestPercentPatrons'></div>
+
+            <div class='cell'>Comfortable</div>
+            <div class='cell'>Intermediate</div>
+            <div class='cell' id='comfortableCost'></div>
+            <div class='cell' id='comfortableMarkup'></div>
+            <div class='cell' id='comfortablePrice'>.5</div>
+            <div class='cell' id='comfortablePercentPatrons'></div>
+
+            <div class='cell'>Wealthy</div>
+            <div class='cell'>Expert</div>
+            <div class='cell' id='wealthyCost'></div>
+            <div class='cell' id='wealthyMarkup'></div>
+            <div class='cell' id='wealthyPrice'>2</div>
+            <div class='cell' id='wealthyPercentPatrons'></div>
+
+            <div class='cell'>Aristocratic</div>
+            <div class='cell'>Master</div>
+            <div class='cell' id='aristocraticCost'></div>
+            <div class='cell' id='aristocraticMarkup'></div>
+            <div class='cell' id='aristocraticPrice'>4</div>
+            <div class='cell' id='aristocraticPercentPatrons'></div>
+        </div>
+        <div class='container-simulation'>
+            <div class='main-heading' style='grid-column: span 6;'>Simulation</div>
+            <div class='row-heading' style='grid-column: span 3;'>Number of Runs <input type='text' id='NumberOfRuns' /></div>
+            <div class='row-heading' style='grid-column: span 3;'><input type='button' value='Run' onclick='RunSimulation();' /></div>
+
+            <div class='row-heading'>Month</div>
+            <div class='row-heading'>People served</div>
+            <div class='row-heading'>Cost Food</div>
+            <div class='row-heading'>Cost Staff</div>
+            <div class='row-heading'>Sales</div>
+            <div class='row-heading'>Profit</div>
+        </div>
+    </body>
+    <script>
+        var data = {
+            "RestaurantInfo" : 
+            {
+                "HoursPerDay" : 10,
+                "BaseReputation" : 2,
+                "Reputation" : 0,
+                "NumberOfTables" : 6,
+                "MinTablesPerDay" : 0,
+                "MaxTablesPerDay" : 20,
+                "AveragePeoplePerDay" : 0,
+                "ChefSkill" : "novice"
+            },
+            "StaffInfo" :
+            { 
+                "novice" :
+                    {
+                        "Title" : "Novice",
+                        "CostPerDay" : 0.5,
+                        "RepMod" : 0,
+                        "MinRep" : 0
+                    },
+                "intermediate" :
+                    {
+                        "Title" : "Intermediate",
+                        "CostPerDay" : 1,
+                        "RepMod" : 0,
+                        "MinRep" : 0
+                    },
+                "expert" :
+                    {
+                        "Title" : "Expert",
+                        "CostPerDay" : 2,
+                        "RepMod" : 1,
+                        "MinRep" : 3
+                    },
+                "master" :
+                    {
+                        "Title" : "Master",
+                        "CostPerDay" : 4,
+                        "RepMod" : 3,
+                        "MinRep" : 7
+                    }
+            },
+            "MealInfo" :
+            {
+                "Squalid" : {
+                    "Name":"Squalid",
+                    "MinSkill":"novice",
+                    "Cost":0,
+                    "Markup":0.3,
+                    "Price":0.07,
+                    "PercentPatrons": 0
+                },
+                "Poor" : {
+                    "Name":"Poor",
+                    "MinSkill":"novice",
+                    "Cost":0,
+                    "Markup":0.3,
+                    "Price":0.1,
+                    "PercentPatrons": 0
+                },
+                "Modest" : {
+                    "Name":"Modest",
+                    "MinSkill":"novice",
+                    "Cost":0,
+                    "Markup":0.3,
+                    "Price":0.3,
+                    "PercentPatrons": 0
+                },
+                "Comfortable" : {
+                    "Name":"Comfortable",
+                    "MinSkill":"novice",
+                    "Cost":0,
+                    "Markup":0.3,
+                    "Price":0.5,
+                    "PercentPatrons": 0
+                },
+                "Wealthy" : {
+                    "Name":"Wealthy",
+                    "MinSkill":"novice",
+                    "Cost":0,
+                    "Markup":0.3,
+                    "Price":2,
+                    "PercentPatrons": 0
+                },
+                "Aristocratic" : {
+                    "Name":"Aristocratic",
+                    "MinSkill":"novice",
+                    "Cost":0,
+                    "Markup":0.3,
+                    "Price":4,
+                    "PercentPatrons": 0
+                }
+            }
+        };
+
+        function RollDice(numberOfDice, sizeOfDie)
+        {
+            var total = 0;
+
+            for(i = 0; i < numberOfDice; i++)
+            {
+                total += RollDie(sizeOfDie);
+            }
+
+            return total;
+        }
+
+        function RollDie(sizeOfDie)
+        {
+            return Math.round(Math.random() * sizeOfDie) + 1;
+        }
+
+        function calcMaxTablesPerHour(reputation)
+        {
+            return 2 * reputation;
+        }
+
+        function calcMaxTablesPerDay(numberOfTables, maxTablesPerHour)
+        {
+            return Math.min(numberOfTables, maxTablesPerHour) * data.RestaurantInfo.HoursPerDay;
+        }
+
+        function calcMinTablesPerDay(reputation, maxTablesPerDay)
+        {
+            return Math.min((reputation/10) * maxTablesPerDay, maxTablesPerDay);
+        }
+
+        function calcAveragePeoplePerTable(reputation)
+        {
+            return 1.5 + (reputation * .25);
+        }
+
+        function Load()
+        {
+            OnChefSkillChange();
+        }
+
+        function UpdateInfos()
+        {
+            UpdateRestaurantInfo();
+            UpdateMealInfo();
+        }
+
+        function OnChefSkillChange()
+        {
+            data.RestaurantInfo.ChefSkill = document.querySelector("#chefSkill").value;
+            data.RestaurantInfo.Reputation = data.RestaurantInfo.BaseReputation;// + data.StaffInfo[data.RestaurantInfo.ChefSkill].RepMod;
+            UpdateInfos();
+        }
+
+        function UpdateRestaurantInfo()
+        {
+            var maxTablesPerHour = calcMaxTablesPerHour(data.RestaurantInfo.Reputation);
+            data.RestaurantInfo.MaxTablesPerDay = calcMaxTablesPerDay(data.RestaurantInfo.NumberOfTables, maxTablesPerHour);
+            data.RestaurantInfo.MinTablesPerDay = calcMinTablesPerDay(data.RestaurantInfo.Reputation, data.RestaurantInfo.MaxTablesPerDay);
+
+            document.querySelector("#BaseReputation").innerText = data.RestaurantInfo.BaseReputation;
+            document.querySelector("#Reputation").innerText = data.RestaurantInfo.Reputation;
+            document.querySelector("#MinTablesDay").innerText = data.RestaurantInfo.MinTablesPerDay;
+            document.querySelector("#MaxTablesDay").innerText = data.RestaurantInfo.MaxTablesPerDay;
+            document.querySelector("#AveragePeopleDay").innerText = round(((data.RestaurantInfo.MaxTablesPerDay/2) + (data.RestaurantInfo.MinTablesPerDay /2))
+                * calcAveragePeoplePerTable(data.RestaurantInfo.Reputation), 0);
+
+        }
+
+        function UpdateMealInfo()
+        {
+            // Price
+            document.querySelector("#squalidPrice").innerText = data.MealInfo["Squalid"].Price;
+            document.querySelector("#poorPrice").innerText = data.MealInfo["Poor"].Price;
+            document.querySelector("#modestPrice").innerText = data.MealInfo["Modest"].Price;
+            document.querySelector("#comfortablePrice").innerText = data.MealInfo["Comfortable"].Price;
+            document.querySelector("#wealthyPrice").innerText = data.MealInfo["Wealthy"].Price;
+            document.querySelector("#aristocraticPrice").innerText = data.MealInfo["Aristocratic"].Price;
+
+            // Cost
+            data.MealInfo["Squalid"].Cost = round(data.MealInfo["Squalid"].Price / (1+data.MealInfo["Squalid"].Markup), 2);
+            data.MealInfo["Poor"].Cost = round(data.MealInfo["Poor"].Price / (1+data.MealInfo["Poor"].Markup), 2);
+            data.MealInfo["Modest"].Cost = round(data.MealInfo["Modest"].Price / (1+data.MealInfo["Modest"].Markup), 2);
+            data.MealInfo["Comfortable"].Cost = round(data.MealInfo["Comfortable"].Price / (1+data.MealInfo["Comfortable"].Markup), 2);
+            data.MealInfo["Wealthy"].Cost = round(data.MealInfo["Wealthy"].Price / (1+data.MealInfo["Wealthy"].Markup), 2);
+            data.MealInfo["Aristocratic"].Cost = round(data.MealInfo["Aristocratic"].Price / (1+data.MealInfo["Aristocratic"].Markup), 2);
+
+            document.querySelector("#squalidCost").innerText = data.MealInfo["Squalid"].Cost;
+            document.querySelector("#poorCost").innerText = data.MealInfo["Poor"].Cost;
+            document.querySelector("#modestCost").innerText = data.MealInfo["Modest"].Cost;
+            document.querySelector("#comfortableCost").innerText = data.MealInfo["Comfortable"].Cost;
+            document.querySelector("#wealthyCost").innerText = data.MealInfo["Wealthy"].Cost;
+            document.querySelector("#aristocraticCost").innerText = data.MealInfo["Aristocratic"].Cost;
+
+            // Markup
+            document.querySelector("#squalidMarkup").innerText = (data.MealInfo["Squalid"].Markup * 100) + "%";
+            document.querySelector("#poorMarkup").innerText = (data.MealInfo["Poor"].Markup * 100) + "%";
+            document.querySelector("#modestMarkup").innerText = (data.MealInfo["Modest"].Markup * 100) + "%";
+            document.querySelector("#comfortableMarkup").innerText = (data.MealInfo["Comfortable"].Markup * 100) + "%";
+            document.querySelector("#wealthyMarkup").innerText = (data.MealInfo["Wealthy"].Markup * 100) + "%";
+            document.querySelector("#aristocraticMarkup").innerText = (data.MealInfo["Aristocratic"].Markup * 100) + "%";
+
+            data.MealInfo["Squalid"].PercentPatrons = 0;
+            data.MealInfo["Poor"].PercentPatrons = 0;
+            data.MealInfo["Modest"].PercentPatrons = 0;
+            data.MealInfo["Comfortable"].PercentPatrons = 0;
+            data.MealInfo["Wealthy"].PercentPatrons = 0;
+            data.MealInfo["Aristocratic"].PercentPatrons = 0;
+
+            switch(data.RestaurantInfo.ChefSkill)
+            {
+                case "novice":
+                    data.MealInfo["Squalid"].PercentPatrons = .5;
+                    data.MealInfo["Poor"].PercentPatrons = .4;
+                    data.MealInfo["Modest"].PercentPatrons = .1;
+                    break;
+                case "intermediate":
+                    data.MealInfo["Poor"].PercentPatrons = .5;
+                    data.MealInfo["Modest"].PercentPatrons = .4;
+                    data.MealInfo["Comfortable"].PercentPatrons = .1;
+                    break;
+                case "expert":
+                    data.MealInfo["Modest"].PercentPatrons = .5;
+                    data.MealInfo["Comfortable"].PercentPatrons = .4;
+                    data.MealInfo["Wealthy"].PercentPatrons = .1;
+                    break;
+                case "master":
+                    data.MealInfo["Comfortable"].PercentPatrons = .5;
+                    data.MealInfo["Wealthy"].PercentPatrons = .4;
+                    data.MealInfo["Aristocratic"].PercentPatrons = .1;
+                    break;
+                default:
+                    break;
+            }
+
+            // % of patrons per day
+            document.querySelector("#squalidPercentPatrons").innerText = (data.MealInfo["Squalid"].PercentPatrons * 100) + "%";
+            document.querySelector("#poorPercentPatrons").innerText = (data.MealInfo["Poor"].PercentPatrons * 100) + "%";
+            document.querySelector("#modestPercentPatrons").innerText = (data.MealInfo["Modest"].PercentPatrons * 100) + "%";
+            document.querySelector("#comfortablePercentPatrons").innerText = (data.MealInfo["Comfortable"].PercentPatrons * 100) + "%";
+            document.querySelector("#wealthyPercentPatrons").innerText = (data.MealInfo["Wealthy"].PercentPatrons * 100) + "%";
+            document.querySelector("#aristocraticPercentPatrons").innerText = (data.MealInfo["Aristocratic"].PercentPatrons * 100) + "%";
+        }
+
+        function round(number, decimals)
+        {
+            var percision = Math.pow(10, decimals);
+            return Math.floor((number * percision) + .5) / percision;
+        }
+
+        function RunSimulation()
+        {
+            var container = document.querySelector(".container-simulation");
+
+            // Clear old nodse
+            var children = container.querySelectorAll(".cell");
+
+            children.forEach(function(child){
+                if(child.parentNode)
+                {
+                    child.parentNode.removeChild(child);
+                }
+            });
+
+            var runs = document.querySelector("#NumberOfRuns").value;
+
+            for(i = 0; i < runs; i++)
+            {
+                // each run
+                var peoplePerMonth = 0;
+
+                for(j = 0; j < 30; j++)
+                {
+                    // each day
+                    var tables = RollDie(data.RestaurantInfo.MaxTablesPerDay - data.RestaurantInfo.MinTablesPerDay) + data.RestaurantInfo.MinTablesPerDay;
+                    peoplePerMonth += tables * calcAveragePeoplePerTable(data.RestaurantInfo.Reputation);
+                }
+                var chefs = Math.ceil(data.RestaurantInfo.MaxTablesPerDay / 100);
+                var waiters = Math.ceil(data.RestaurantInfo.NumberOfTables / 4);
+                var foodCost = 0;
+                var foodSales = 0;
+                var staffCost = ((chefs * data.StaffInfo[data.RestaurantInfo.ChefSkill].CostPerDay) + (waiters * .2)) * 30;
+
+                Object.keys(data.MealInfo).forEach(function(key, index)
+                    {
+                        foodCost += (peoplePerMonth * data.MealInfo[key].PercentPatrons * data.MealInfo[key].Cost);
+                        foodSales += (peoplePerMonth * data.MealInfo[key].PercentPatrons * data.MealInfo[key].Price);
+                    });
+
+                AddCell(container, i + 1);
+                AddCell(container, peoplePerMonth);
+                AddCell(container, round(foodCost, 2));
+                AddCell(container, round(staffCost, 2));
+                AddCell(container, round(foodSales, 2));
+                AddCell(container, round((foodSales - foodCost - staffCost), 2));
+            }
+        }
+
+        function AddCell(parent, value)
+        {
+            var e = document.createElement("div");
+            e.className = "cell";
+            e.innerText = value;
+            parent.appendChild(e);
+        }
+    </script>
+</html>
