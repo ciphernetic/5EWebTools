@@ -16,10 +16,18 @@
             }
 
             .container-chef {
-                width: 600px;
+                width: 450px;
                 margin: 10px auto;
                 display: grid;
-                grid-template-columns: repeat(4, 150px);
+                grid-template-columns: repeat(3, 150px);
+                background: #283A63;
+            }
+
+            .container-rep-rules {
+                width: 450px;
+                margin: 10px auto;
+                display: grid;
+                grid-template-columns: 100px 150px 200px;
                 background: #283A63;
             }
 
@@ -61,6 +69,48 @@
         </style>
     </head>
     <body onload="Load();">
+        <div class='container-rep-rules'>
+            <div class='main-heading' style='grid-column: span 3;'>Reputation Rules</div>
+            <div class='row-heading'>Current Rep</div>
+            <div class='row-heading'>DC to increase</div>
+            <div class='row-heading'>Decrease on roll of X or lower</div>
+
+            <div class='cell'>1</div>
+            <div class='cell'>11</div>
+            <div class='cell'>1</div>
+
+            <div class='cell'>2</div>
+            <div class='cell'>12</div>
+            <div class='cell'>1</div>
+            
+            <div class='cell'>3</div>
+            <div class='cell'>13</div>
+            <div class='cell'>2</div>
+            
+            <div class='cell'>4</div>
+            <div class='cell'>14</div>
+            <div class='cell'>2</div>
+            
+            <div class='cell'>5</div>
+            <div class='cell'>15</div>
+            <div class='cell'>3</div>
+            
+            <div class='cell'>6</div>
+            <div class='cell'>16</div>
+            <div class='cell'>3</div>
+            
+            <div class='cell'>7</div>
+            <div class='cell'>17</div>
+            <div class='cell'>4</div>
+            
+            <div class='cell'>8</div>
+            <div class='cell'>18</div>
+            <div class='cell'>4</div>
+            
+            <div class='cell'>9</div>
+            <div class='cell'>19</div>
+            <div class='cell'>5</div>
+        </div>
         <div class='container-restaurant'>
             <div class='main-heading' style='grid-column: span 2;'>Restaurant Info</div>
 
@@ -68,10 +118,20 @@
             <div class='cell' id='HoursPerDay'>10</div>
 
             <div class='row-heading'>Base Reputation</div>
-            <div class='cell' id='BaseReputation'></div>
-
-            <div class='row-heading'>Reputation</div>
-            <div class='cell' id='Reputation'></div>
+            <div class='cell'>
+                <select id='Reputation' onchange="OnChefSkillChange();">
+                    <option value='1'>1</option>
+                    <option value='2'>2</option>
+                    <option value='3'>3</option>
+                    <option value='4'>4</option>
+                    <option value='5'>5</option>
+                    <option value='6'>6</option>
+                    <option value='7'>7</option>
+                    <option value='8'>8</option>
+                    <option value='9'>9</option>
+                    <option value='10'>10</option>
+                </select>
+            </div>
 
             <div class='row-heading'># of tables</div>
             <div class='cell' id='NumberOfTables'>6</div>
@@ -88,8 +148,8 @@
             <div class='row-heading'>Chef Skill</div>
             <div class='cell'>
                 <select id='chefSkill' onchange="OnChefSkillChange();">
-                    <option value='novice'>Novice</option>
-                    <option value='intermediate' selected>Intermediate</option>
+                    <option value='novice' selected>Novice</option>
+                    <option value='intermediate'>Intermediate</option>
                     <option value='expert'>Expert</option>
                     <option value='master'>Master</option>
                 </select>
@@ -97,30 +157,25 @@
         </div>
 
         <div class='container-chef'>
-            <div class='main-heading' style='grid-column: span 4;'>Staff Info</div>
+            <div class='main-heading' style='grid-column: span 3;'>Staff Info</div>
             <div class='row-heading'>Chefs Skill</div>
             <div class='row-heading'>Chefs Cost/day</div>
-            <div class='row-heading'>Chefs Reputation Modifier</div>
             <div class='row-heading'>Chefs Min Rep Required</div>
 
             <div class='cell'>Novice</div>
             <div class='cell' id='noviceCost'>.5 g</div>
-            <div class='cell' id='noviceRepMod'>0</div>
             <div class='cell' id='noviceRepRequired'>0</div>
 
             <div class='cell'>Intermediate</div>
             <div class='cell' id='intermediateCost'>1 g</div>
-            <div class='cell' id='intermediateRepMod'>0</div>
             <div class='cell' id='intermediateRepRequired'>0</div>
 
             <div class='cell'>Expert</div>
             <div class='cell' id='expertCost'>2 g</div>
-            <div class='cell' id='expertRepMod'>1</div>
             <div class='cell' id='expertRepRequired'>3</div>
 
             <div class='cell' id='masterTitle'>Master</div>
             <div class='cell' id='masterCost'>4 g</div>
-            <div class='cell' id='masterRepMod'>3</div>
             <div class='cell' id='masterRepRequired'>7</div>
         </div>
 
@@ -188,12 +243,13 @@
             <div class='row-heading'>Profit</div>
         </div>
     </body>
+
     <script>
         var data = {
             "RestaurantInfo" : 
             {
                 "HoursPerDay" : 10,
-                "BaseReputation" : 2,
+                "BaseReputation" : 1,
                 "Reputation" : 0,
                 "NumberOfTables" : 6,
                 "MinTablesPerDay" : 0,
@@ -206,30 +262,34 @@
                 "novice" :
                     {
                         "Title" : "Novice",
-                        "CostPerDay" : 0.5,
+                        "CostPerDay" : 0.2,
                         "RepMod" : 0,
-                        "MinRep" : 0
+                        "MinRep" : 0,
+                        "TablesPerWaiter" : 10
                     },
                 "intermediate" :
                     {
                         "Title" : "Intermediate",
                         "CostPerDay" : 1,
                         "RepMod" : 0,
-                        "MinRep" : 0
+                        "MinRep" : 3,
+                        "TablesPerWaiter" : 8
                     },
                 "expert" :
                     {
                         "Title" : "Expert",
                         "CostPerDay" : 2,
                         "RepMod" : 1,
-                        "MinRep" : 3
+                        "MinRep" : 6,
+                        "TablesPerWaiter" : 5
                     },
                 "master" :
                     {
                         "Title" : "Master",
                         "CostPerDay" : 4,
                         "RepMod" : 3,
-                        "MinRep" : 7
+                        "MinRep" : 8,
+                        "TablesPerWaiter" : 2
                     }
             },
             "MealInfo" :
@@ -238,7 +298,7 @@
                     "Name":"Squalid",
                     "MinSkill":"novice",
                     "Cost":0,
-                    "Markup":0.3,
+                    "Markup":0.5,
                     "Price":0.07,
                     "PercentPatrons": 0
                 },
@@ -246,7 +306,7 @@
                     "Name":"Poor",
                     "MinSkill":"novice",
                     "Cost":0,
-                    "Markup":0.3,
+                    "Markup":0.5,
                     "Price":0.1,
                     "PercentPatrons": 0
                 },
@@ -254,7 +314,7 @@
                     "Name":"Modest",
                     "MinSkill":"novice",
                     "Cost":0,
-                    "Markup":0.3,
+                    "Markup":0.5,
                     "Price":0.3,
                     "PercentPatrons": 0
                 },
@@ -262,7 +322,7 @@
                     "Name":"Comfortable",
                     "MinSkill":"novice",
                     "Cost":0,
-                    "Markup":0.3,
+                    "Markup":0.5,
                     "Price":0.5,
                     "PercentPatrons": 0
                 },
@@ -270,7 +330,7 @@
                     "Name":"Wealthy",
                     "MinSkill":"novice",
                     "Cost":0,
-                    "Markup":0.3,
+                    "Markup":0.5,
                     "Price":2,
                     "PercentPatrons": 0
                 },
@@ -278,7 +338,7 @@
                     "Name":"Aristocratic",
                     "MinSkill":"novice",
                     "Cost":0,
-                    "Markup":0.3,
+                    "Markup":0.5,
                     "Price":4,
                     "PercentPatrons": 0
                 }
@@ -304,7 +364,8 @@
 
         function calcMaxTablesPerHour(reputation)
         {
-            return 2 * reputation;
+            //return Math.max(round(reputation/10 * data.RestaurantInfo.NumberOfTables, 0), 1);
+            return Math.max(Math.ceil(reputation/10 * data.RestaurantInfo.NumberOfTables), 1);
         }
 
         function calcMaxTablesPerDay(numberOfTables, maxTablesPerHour)
@@ -314,7 +375,7 @@
 
         function calcMinTablesPerDay(reputation, maxTablesPerDay)
         {
-            return Math.min((reputation/10) * maxTablesPerDay, maxTablesPerDay);
+            return Math.max(Math.min((reputation/10) * (maxTablesPerDay/2), maxTablesPerDay), 1);
         }
 
         function calcAveragePeoplePerTable(reputation)
@@ -324,19 +385,21 @@
 
         function Load()
         {
+            document.querySelector("#Reputation").value = data.RestaurantInfo.BaseReputation;
             OnChefSkillChange();
         }
 
         function UpdateInfos()
         {
             UpdateRestaurantInfo();
+            UpdateChefInfo();
             UpdateMealInfo();
         }
 
         function OnChefSkillChange()
         {
             data.RestaurantInfo.ChefSkill = document.querySelector("#chefSkill").value;
-            data.RestaurantInfo.Reputation = data.RestaurantInfo.BaseReputation;// + data.StaffInfo[data.RestaurantInfo.ChefSkill].RepMod;
+            data.RestaurantInfo.Reputation = document.querySelector("#Reputation").value;
             UpdateInfos();
         }
 
@@ -346,13 +409,23 @@
             data.RestaurantInfo.MaxTablesPerDay = calcMaxTablesPerDay(data.RestaurantInfo.NumberOfTables, maxTablesPerHour);
             data.RestaurantInfo.MinTablesPerDay = calcMinTablesPerDay(data.RestaurantInfo.Reputation, data.RestaurantInfo.MaxTablesPerDay);
 
-            document.querySelector("#BaseReputation").innerText = data.RestaurantInfo.BaseReputation;
-            document.querySelector("#Reputation").innerText = data.RestaurantInfo.Reputation;
             document.querySelector("#MinTablesDay").innerText = data.RestaurantInfo.MinTablesPerDay;
             document.querySelector("#MaxTablesDay").innerText = data.RestaurantInfo.MaxTablesPerDay;
             document.querySelector("#AveragePeopleDay").innerText = round(((data.RestaurantInfo.MaxTablesPerDay/2) + (data.RestaurantInfo.MinTablesPerDay /2))
                 * calcAveragePeoplePerTable(data.RestaurantInfo.Reputation), 0);
 
+        }
+
+        function UpdateChefInfo()
+        {
+            document.querySelector("#noviceCost").innerText = data.StaffInfo["novice"].CostPerDay;
+            document.querySelector("#noviceRepRequired").innerText = data.StaffInfo["novice"].MinRep;
+            document.querySelector("#intermediateCost").innerText = data.StaffInfo["intermediate"].CostPerDay;
+            document.querySelector("#intermediateRepRequired").innerText = data.StaffInfo["intermediate"].MinRep;
+            document.querySelector("#expertCost").innerText = data.StaffInfo["expert"].CostPerDay;
+            document.querySelector("#expertRepRequired").innerText = data.StaffInfo["expert"].MinRep;
+            document.querySelector("#masterCost").innerText = data.StaffInfo["master"].CostPerDay;
+            document.querySelector("#masterRepRequired").innerText = data.StaffInfo["master"].MinRep;
         }
 
         function UpdateMealInfo()
@@ -413,9 +486,9 @@
                     data.MealInfo["Wealthy"].PercentPatrons = .1;
                     break;
                 case "master":
-                    data.MealInfo["Comfortable"].PercentPatrons = .5;
-                    data.MealInfo["Wealthy"].PercentPatrons = .4;
-                    data.MealInfo["Aristocratic"].PercentPatrons = .1;
+                    data.MealInfo["Comfortable"].PercentPatrons = .6;
+                    data.MealInfo["Wealthy"].PercentPatrons = .35;
+                    data.MealInfo["Aristocratic"].PercentPatrons = .05;
                     break;
                 default:
                     break;
@@ -464,7 +537,7 @@
                     peoplePerMonth += tables * calcAveragePeoplePerTable(data.RestaurantInfo.Reputation);
                 }
                 var chefs = Math.ceil(data.RestaurantInfo.MaxTablesPerDay / 100);
-                var waiters = Math.ceil(data.RestaurantInfo.NumberOfTables / 4);
+                var waiters = Math.ceil(data.RestaurantInfo.NumberOfTables / data.StaffInfo[data.RestaurantInfo.ChefSkill].TablesPerWaiter);
                 var foodCost = 0;
                 var foodSales = 0;
                 var staffCost = ((chefs * data.StaffInfo[data.RestaurantInfo.ChefSkill].CostPerDay) + (waiters * .2)) * 30;
